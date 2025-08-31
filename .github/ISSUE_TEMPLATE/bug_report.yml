@@ -1,0 +1,94 @@
+name: 🐛 Bug Report
+description: Report a bug or unexpected behavior in the Minecraft mod
+title: "[Bug]: "
+labels: [bug]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ Before you start
+        Please make sure:
+        - You are running the latest version of the mod
+        - You checked if this bug was already reported
+        - You included logs/crash reports if available
+
+  - type: input
+    id: mod_version
+    attributes:
+      label: Mod Version
+      description: Which version of the mod are you using? (e.g. `1.2.3`)
+      placeholder: "e.g. v1.2.3"
+    validations:
+      required: true
+
+  - type: input
+    id: mc_version
+    attributes:
+      label: Minecraft Version
+      description: What version of Minecraft are you running?
+      placeholder: "e.g. 1.20.1"
+    validations:
+      required: true
+
+  - type: input
+    id: loader_version
+    attributes:
+      label: Mod Loader & Version
+      description: What mod loader and version are you using? (Forge/Fabric/Quilt)
+      placeholder: "e.g. Fabric 0.14.21"
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+      placeholder: "Explain the problem you are facing..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Tell us how to reproduce the bug step by step.
+      placeholder: |
+        1. Install mod
+        2. Launch game
+        3. Place block XYZ
+        4. Game crashes
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: "I expected..."
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Crash Report
+      description: Paste your logs here (use [Pastebin](https://pastebin.com) or [Gist](https://gist.github.com) or [MCLogs](https://mclo.gs) if long).
+      render: shell
+
+  - type: checkboxes
+    id: platform
+    attributes:
+      label: Platform
+      description: Where are you running the game?
+      options:
+        - label: Windows
+        - label: macOS
+        - label: Linux
+        - label: Server (Dedicated)
+        - label: Other
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional Context
+      description: Add any other context, screenshots, or videos about the problem here.
