@@ -32,10 +32,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Clean build
-        run: ./gradlew clean build -x test
+        run: bash ./gradlew clean build -x test
 
       - name: Generate sources JAR
-        run: ./gradlew sourcesJar
+        run: bash ./gradlew sourcesJar
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
