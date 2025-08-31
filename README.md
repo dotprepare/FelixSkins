@@ -1,4 +1,4 @@
-# FelixSkin v1.1.4 - Minecraft Fabric Mod
+# FelixSkin v1.2.3 - Minecraft Fabric Mod
 
 A client-only Fabric mod for Minecraft 1.20.1 that allows players to drag and drop PNG skin files directly into the game and apply them immediately without restarting.
 
@@ -70,8 +70,8 @@ A client-only Fabric mod for Minecraft 1.20.1 that allows players to drag and dr
 ### Build Output
 
 The built mod will be available in:
-- `build/libs/felixskin-1.1.4.jar` - Main mod JAR
-- `build/libs/felixskin-1.1.4-sources.jar` - Source code JAR
+- `build/libs/felixskin-1.2.3.jar` - Main mod JAR
+- `build/libs/felixskin-1.2.3-sources.jar` - Source code JAR
 
 ## 🏗️ Project Structure
 
