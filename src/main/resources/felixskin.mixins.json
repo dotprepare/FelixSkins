@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "xyz.felixcraft.felixskin.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "felixskin-refmap.json",
+  "mixins": [],
+  "client": [
+    "PlayerSkinMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

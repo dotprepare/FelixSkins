@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "felixskin",
+  "version": "${version}",
+  "name": "FelixSkin",
+  "description": "FelixSkin: Drag-and-drop HD skin loader with immediate preview",
+  "authors": [
+    "Frame121"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Frame121-DEV",
+    "sources": "https://github.com/Frame121-DEV"
+  },
+  "license": "MIT",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "xyz.felixcraft.felixskin.FelixSkinClient"
+    ],
+    "server": [
+      "xyz.felixcraft.felixskin.FelixSkinServer"
+    ]
+  },
+  "mixins": [
+    "felixskin.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": ">=0.91.0+1.20.1",
+    "minecraft": "${minecraft_version}",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
