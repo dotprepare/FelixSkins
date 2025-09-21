@@ -130,7 +130,7 @@ Check the Minecraft logs for any error messages. The mod logs important events w
 
 ## 📞 Support
 
-- **GitHub**: https://github.com/edoren/SkinChanger
+- **GitHub**: https://github.com/dotprepare/FelixSkins
 - **Discord**: Join our community for support
 - **Issues**: Report bugs on GitHub Issues
 
