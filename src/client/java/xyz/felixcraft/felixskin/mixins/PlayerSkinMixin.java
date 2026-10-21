@@ -32,6 +32,18 @@ public class PlayerSkinMixin {
         }
     }
 
-    // Note: isSlim injection removed due to method signature incompatibility in MC 1.20.1
-    // The skin texture injection should be sufficient for basic functionality
+    // Inject at the beginning of getModel method so the slim setting picks the Alex/Steve arm model
+    @Inject(method = "method_3121", at = @At("HEAD"), cancellable = true, remap = false)
+    private void onGetModel(CallbackInfoReturnable<String> cir) {
+        AbstractClientPlayerEntity player = (AbstractClientPlayerEntity) (Object) this;
+        SkinManager.SkinData skinData = FelixSkinClient.getSkinManager().getPlayerSkin(player.getUuid());
+
+        if (skinData != null && textureIsRegistered(player.getUuid())) {
+            cir.setReturnValue(skinData.isSlim() ? "slim" : "default");
+        }
+    }
+
+    private static boolean textureIsRegistered(UUID playerUuid) {
+        return FelixSkinClient.getSkinManager().getPlayerTexture(playerUuid) != null;
+    }
 }

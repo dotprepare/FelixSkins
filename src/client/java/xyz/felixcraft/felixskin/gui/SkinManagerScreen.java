@@ -12,6 +12,7 @@ import xyz.felixcraft.felixskin.FelixSkinClient;
 import xyz.felixcraft.felixskin.skin.SkinManager;
 
 import java.nio.file.Path;
+import java.util.List;
 
 public class SkinManagerScreen extends Screen {
     private static final Logger LOGGER = LoggerFactory.getLogger("FelixSkin");
@@ -93,6 +94,25 @@ public class SkinManagerScreen extends Screen {
         }
     }
 
+    @Override
+    public void filesDragged(List<Path> paths) {
+        // Called by vanilla's drop callback while this screen is open; only the first PNG is used
+        for (Path path : paths) {
+            if (path.getFileName() != null && path.getFileName().toString().toLowerCase().endsWith(".png")) {
+                LOGGER.info("PNG file dropped: {}", path);
+                if (skinManager.loadSkinWithSlimMode(path, skinManager.isSlimMode())) {
+                    selectedFile = path;
+                    skinLoaded = true;
+                    setStatus("gui.felixskin.upload_success", 0x55FF55);
+                } else {
+                    setStatus("gui.felixskin.upload_failed", 0xFF5555);
+                }
+                return;
+            }
+        }
+        setStatus("gui.felixskin.error.invalid_file", 0xFF5555);
+    }
+
     private void setStatus(String key, int color) {
         statusMessage = Text.translatable(key).getString();
         statusColor = color;
@@ -104,6 +124,11 @@ public class SkinManagerScreen extends Screen {
         super.render(context, mouseX, mouseY, delta);
 
         int centerX = width / 2;
+
+        // Status of the last drop / clear action
+        if (!statusMessage.isEmpty()) {
+            context.drawCenteredTextWithShadow(textRenderer, statusMessage, centerX, height / 2 + 50, statusColor);
+        }
 
         // Credits at bottom
         int creditsY = height - 40;

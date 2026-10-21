@@ -8,7 +8,6 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.PointerBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.felixcraft.felixskin.skin.SkinManager;
@@ -16,8 +15,6 @@ import xyz.felixcraft.felixskin.gui.SkinManagerScreen;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class FelixSkinClient implements ClientModInitializer {
@@ -26,11 +23,11 @@ public class FelixSkinClient implements ClientModInitializer {
     
     private static KeyBinding openSkinManagerKey;
     private static SkinManager skinManager;
-    private static boolean dragAndDropSetup = false;
+    private static boolean savedSkinsLoaded = false;
     
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Initializing FelixSkin mod v1.2.2...");
+        LOGGER.info("Initializing FelixSkin mod v1.2.3...");
 
         // Check for mod compatibility
         checkModCompatibility();
@@ -46,14 +43,12 @@ public class FelixSkinClient implements ClientModInitializer {
             "category.felixskin.general"
         ));
 
-        // Register tick event to check for key press and setup drag-and-drop if needed
+        // Register tick event to check for key press and load saved skins once the client is ready.
+        // Drag-and-drop is handled by SkinManagerScreen#filesDragged, which vanilla's own GLFW
+        // drop callback forwards to; replacing that callback would break resource pack dragging.
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            // Setup drag-and-drop if not done yet and window is available
-            if (!dragAndDropSetup && client.getWindow() != null) {
-                setupDragAndDrop();
-                dragAndDropSetup = true;
-
-                // Load saved skins now that client is ready
+            if (!savedSkinsLoaded) {
+                savedSkinsLoaded = true;
                 skinManager.loadSavedSkinsWhenReady();
             }
 
@@ -65,50 +60,6 @@ public class FelixSkinClient implements ClientModInitializer {
         LOGGER.info("FelixSkin mod initialized successfully!");
     }
 
-    private void setupDragAndDrop() {
-        // Check if window is available (might be null during early initialization)
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.getWindow() == null) {
-            LOGGER.warn("Window not available yet, drag-and-drop setup will be delayed");
-            return;
-        }
-
-        // Set up GLFW drop callback for file drag-and-drop
-        GLFW.glfwSetDropCallback(client.getWindow().getHandle(), (window, count, names) -> {
-            if (count > 0) {
-                // Convert pointer buffer to string array
-                PointerBuffer nameBuffer = PointerBuffer.create(names, count);
-
-                // Process dropped files
-                for (int i = 0; i < count; i++) {
-                    String fileName = nameBuffer.getStringUTF8(i);
-                    if (fileName != null && fileName.toLowerCase().endsWith(".png")) {
-                        Path filePath = Paths.get(fileName);
-                        LOGGER.info("PNG file dropped: {}", fileName);
-
-                        // Load the skin on the main thread with slim mode setting
-                        boolean currentSlimMode = skinManager.isSlimMode();
-                        client.execute(() -> {
-                            try {
-                                boolean success = skinManager.loadSkinWithSlimMode(filePath, currentSlimMode);
-                                if (success) {
-                                    LOGGER.info("Successfully loaded dropped skin: {} (slim: {})", fileName, currentSlimMode);
-                                } else {
-                                    LOGGER.error("Failed to load dropped skin: {}", fileName);
-                                }
-                            } catch (Exception e) {
-                                LOGGER.error("Exception while loading dropped skin: {}", fileName, e);
-                            }
-                        });
-                        break; // Only process the first PNG file
-                    }
-                }
-            }
-        });
-
-        LOGGER.info("Drag-and-drop callback setup completed");
-    }
-    
     private void checkModCompatibility() {
         try {
             FabricLoader loader = FabricLoader.getInstance();
@@ -132,7 +83,7 @@ public class FelixSkinClient implements ClientModInitializer {
             }
 
             // Log compatibility information
-            LOGGER.info("FelixSkin v1.2.2 compatibility check completed");
+            LOGGER.info("FelixSkin v1.2.3 compatibility check completed");
             LOGGER.info("Compatible with Minecraft 1.20.1 and Fabric Loader 0.16.12+");
 
         } catch (Exception e) {
