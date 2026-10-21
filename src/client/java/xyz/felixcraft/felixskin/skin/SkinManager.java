@@ -332,12 +332,15 @@ public class SkinManager {
     public void clearPlayerSkin(UUID playerUuid) {
         // Remove skin data
         SkinData removed = playerSkins.remove(playerUuid);
-        if (removed != null) {
+        
+        // Destroy the registered texture; it owns the skin image and closes it
+        Identifier textureId = textureIdentifiers.remove(playerUuid);
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (textureId != null && client != null && client.getTextureManager() != null) {
+            client.getTextureManager().destroyTexture(textureId);
+        } else if (removed != null) {
             removed.getImage().close();
         }
-        
-        // Remove texture identifier
-        textureIdentifiers.remove(playerUuid);
         
         // Remove from config
         config.removePlayerSkin(playerUuid);

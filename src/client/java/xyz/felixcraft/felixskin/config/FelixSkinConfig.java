@@ -80,8 +80,15 @@ public class FelixSkinConfig {
             if (configFile.exists()) {
                 try (FileReader reader = new FileReader(configFile)) {
                     configData = gson.fromJson(reader, ConfigData.class);
-                    LOGGER.info("Config loaded successfully");
                 }
+                // Gson returns null for an empty file, and missing keys can deserialize as null
+                if (configData == null) {
+                    LOGGER.warn("Config file was empty, using defaults");
+                    configData = new ConfigData();
+                } else if (configData.playerSkins == null) {
+                    configData.playerSkins = new HashMap<>();
+                }
+                LOGGER.info("Config loaded successfully");
             } else {
                 configData = new ConfigData();
                 saveConfig();
