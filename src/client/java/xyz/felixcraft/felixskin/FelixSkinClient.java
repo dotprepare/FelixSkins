@@ -27,7 +27,7 @@ public class FelixSkinClient implements ClientModInitializer {
     
     @Override
     public void onInitializeClient() {
-        LOGGER.info("Initializing FelixSkin mod v1.2.3...");
+        LOGGER.info("Initializing FelixSkin mod v1.2.4...");
 
         // Check for mod compatibility
         checkModCompatibility();
@@ -83,7 +83,7 @@ public class FelixSkinClient implements ClientModInitializer {
             }
 
             // Log compatibility information
-            LOGGER.info("FelixSkin v1.2.3 compatibility check completed");
+            LOGGER.info("FelixSkin v1.2.4 compatibility check completed");
             LOGGER.info("Compatible with Minecraft 1.20.1 and Fabric Loader 0.16.12+");
 
         } catch (Exception e) {
